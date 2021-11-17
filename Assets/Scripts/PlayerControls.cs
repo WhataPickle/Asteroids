@@ -75,7 +75,20 @@ public class PlayerControls : MonoBehaviour
     {
         if (!uiBehaviour.isPaused)
         {
-            if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
+            if (Input.GetKeyDown(KeyCode.Space) && !uiBehaviour.controls)
+            {
+                if (currentAmountOfBullets < fireRate)
+                {
+                    ObjectPooling.Instance.SpawnFromPool("PBullet", playerFirePoint.position, playerFirePoint.rotation);
+                    currentAmountOfBullets++;
+                    audioManager.Play("Fire");
+                    if (!shooting)
+                    {
+                        StartCoroutine(FireRate());
+                    }
+                }
+            }
+            else if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space) && uiBehaviour.controls)
             {
                 if (currentAmountOfBullets < fireRate)
                 {
@@ -98,17 +111,20 @@ public class PlayerControls : MonoBehaviour
         {
             audioManager.Play("SExp");
             isAccelerating = false;
+            _thrust.enabled = false;
             Respawn(); //Disables Player if collided with enemy bullet
         }
         if (other.tag == "UFO")
         {
             audioManager.Play("MExp");
             isAccelerating = false;
+            _thrust.enabled = false;
             Respawn(); //Disables Player if collided with UFO
         }
         if (other.tag == "Asteroid")
         {
             isAccelerating = false;
+            _thrust.enabled = false;
             Respawn(); //Disables Player if collided with Asteroid
         }
     }
@@ -239,7 +255,7 @@ public class PlayerControls : MonoBehaviour
         transform.position = pos;
     }
 
-    private IEnumerator FireRate()
+    public IEnumerator FireRate()
     {
         shooting = true;
         yield return new WaitForSeconds(perSecond);
