@@ -110,7 +110,6 @@ public class UiBehaviour : MonoBehaviour
             //Resetting Asteroid variables
             AsteroidSpawner astS = gameController.GetComponent<AsteroidSpawner>();
             astS.currentAmount = 0;
-            astS.startingAmount = 0;
             astS.startedSpawning = false;
             astS.StopAllCoroutines();
             //Resetting life and score count

@@ -102,6 +102,10 @@ public class PlayerControls : MonoBehaviour
                 }
             }
         }
+        else
+        {
+            _thrust.enabled = false;
+        }
     }
 
     //Collision logic
